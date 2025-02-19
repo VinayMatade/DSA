@@ -25,6 +25,7 @@ int main()
 {
     FILE *inputFile;
     int values[10];
+    
     inputFile=fopen("input.csv","r+");
     if(inputFile==NULL)
     {
