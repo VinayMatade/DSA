@@ -6,7 +6,9 @@ void bucketSort(int arr[], int n);
 
 int main()
 {
-    int n=10;
+    int n;
+    printf("Enter the number of elements in the array\n");
+    scanf("%d",&n);
     int arr[n];
     readFile(arr,n,"input.txt");
     printf("array before sorting:\n");
@@ -29,7 +31,7 @@ int main()
 void readFile(int arr[],int n,char *filename)
 {
     FILE *input;
-    input=fopen(filename, "r");
+    input=fopen(filename,"r");
     if (input == NULL) 
     {
         printf("File couldn't be found\n");
@@ -44,25 +46,28 @@ void readFile(int arr[],int n,char *filename)
     }
 }
 
-void bucketSort(int arr[], int n) {
-    int i, j;
-    int max = arr[0];
-    for (i = 1; i < n; i++) {
-        if (arr[i] > max)
-            max = arr[i];
+void bucketSort(int arr[], int n) 
+{
+    int i,j;
+    int max=arr[0];
+    for (i=1;i<n;i++) 
+    {
+        if (arr[i]>max)
+            max=arr[i];
     }
-    int bucket[max + 1];
-    for (i = 0; i <= max; i++) {
+    int bucket[max+1];
+    for (i=0;i<=max;i++)
         bucket[i] = 0;
-    }
-    for (i = 0; i < n; i++) {
+
+    for (i=0;i<n;i++)
         bucket[arr[i]]++;
-    }
-    for (i = 0, j = 0; i <= max; i++) {
-        while (bucket[i] > 0) {
-            arr[j++] = i;
+
+    for(i=0,j=0;i<=max;i++)
+    {
+        while(bucket[i]>0)
+        {
+            arr[j++]=i;
             bucket[i]--;
         }
     }
 }
-
