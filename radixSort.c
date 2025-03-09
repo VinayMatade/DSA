@@ -62,25 +62,23 @@ int getMax(int arr[], int n)
     return max;
 }
 
-void countSort(int arr[], int n)
+void countSort(int arr[], int n, int exp) 
 {
-    int max = arr[0];
-    for (int i=1;i<n;i++)
+    int output[n];
+    int count[10] = {0};
+
+    for (int i = 0; i < n; i++)
+        count[(arr[i] / exp) % 10]++;
+
+    for (int i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+
+    for (int i = n - 1; i >= 0; i--) 
     {
-        if(arr[i]>max)
-            max=arr[i];
+        output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+        count[(arr[i] / exp) % 10]--;
     }
-    int count[max + 1];
-    for(int i = 0; i <= max; i++)
-        count[i] = 0;
-    for(int i = 0; i < n; i++)
-        count[arr[i]]++;
-    int index = 0;
-    for(int i = 0; i <= max;i++)
-    {
-        while (count[i] > 0) {
-            arr[index++] = i;
-            count[i]--;
-        }
-    }
+
+    for (int i = 0; i < n; i++)
+        arr[i] = output[i];
 }

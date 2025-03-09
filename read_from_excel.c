@@ -39,13 +39,13 @@ int main()
     fseek(inputFile, 0, SEEK_END);
     fprintf(inputFile, "\nAscending: ");
 
-    for (int i = 0; i < 10; i++) 
+    for (int i=0;i<10;i++)
         fprintf(inputFile, "%d,", values[i]);
     
-    sort(values, 10, 0);
+    sort(values,10,0);
     fprintf(inputFile, "\nDescending: ");
 
-    for (int i = 0; i < 10; i++)
+    for (int i=0;i<10;i++)
         fprintf(inputFile, "%d,", values[i]);
 
     fclose(inputFile);
