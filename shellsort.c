@@ -1,58 +1,69 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void readFile(int arr[],int n, char *filename);
+void loadArrayFromFile(int arr[], int n, char *filename);
 void shellSort(int arr[], int n);
 
-int main()
-{
-    int n=10;
+int main() {
+    int n = 10;
     int arr[n];
-    readFile(arr,n,"input.txt");
-    printf("array before sorting:\n");
-    
-    for(int i=0;i<n;i++)
-       printf("%d ",arr[i]);
-    
-       printf("\n");
-    
-    shellSort(arr,n);
-    printf("array after sorting:\n");
-    
-    for(int i=0;i<n;i++)
-       printf("%d ",arr[i]);
-    
-       printf("\n");
+
+    loadArrayFromFile(arr, n, "input.txt");
+
+    printf("Array before sorting:\n");
+    for (int i=0;i<n;i++)
+        printf("%d ",arr[i]);
+    printf("\n");
+
+    shellSort(arr, n);
+
+    printf("Array after sorting:\n");
+    for (int i=0;i<n;i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+
     return 0;
 }
 
-void readFile(int arr[],int n,char *filename)
+void loadArrayFromFile(int arr[], int n, char *filename)
 {
-    FILE *input;
-    input=fopen(filename, "r");
-    if (input == NULL) 
-    {
-        printf("File couldn't be found\n");
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Error: Could not open file %s\n", filename);
         exit(1);
     }
-    else
-    {
-        for(int i=0;i<n;i++)
-            fscanf(input, "%d", &arr[i]);
 
-        fclose(input);
+    printf("Reading numbers from file...\n");  // Debugging message
+
+    for (int i = 0; i < n; i++) {
+        if (fscanf(file, "%d", &arr[i]) != 1)
+        {  // Handle file read errors
+            printf("Error: Failed to read number at index %d\n", i);
+            fclose(file);
+            exit(1);
+        }
     }
+
+    fclose(file);
 }
 
-void shellSort(int arr[], int n) {
-    for (int gap = n / 2; gap > 0; gap /= 2) {
-        for (int i = gap; i < n; i++) {
+void shellSort(int arr[], int n)
+{
+    // Start with a big gap, then reduce it
+    for (int gap = n / 2; gap > 0; gap /= 2)
+    {
+        // Perform insertion sort for the current gap size
+        for (int i=gap;i<n;i++)
+        {
             int temp = arr[i];
             int j;
-            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+
+            // Shift elements of the gap-sorted array
+            for (j=i;j>=gap && arr[j-gap]>temp;j-=gap)
                 arr[j] = arr[j - gap];
-            }
-            arr[j] = temp;
+
+            // Insert temp
+            arr[j]=temp;
         }
     }
 }

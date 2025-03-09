@@ -1,78 +1,93 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void readFile(int arr[],int n, char *filename);
-void countingSort(int arr[], int n);
+void loadArrayFromFile(int a[], int n, char *filename);
+void countingSort(int a[], int n);
 
-int main()
-{
-    int n=10;
-    int arr[n];
-    readFile(arr,n,"input.txt");
-    printf("array before sorting:\n");
-    
-    for(int i=0;i<n;i++)
-       printf("%d ",arr[i]);
-    
-       printf("\n");
-    
-    countingSort(arr,n);
-    printf("array after sorting:\n");
-    
-    for(int i=0;i<n;i++)
-       printf("%d ",arr[i]);
-    
-       printf("\n");
+int main() {
+    int n = 10;
+    int a[n];
+
+    loadArrayFromFile(a, n, "input.txt");
+
+    printf("Before sorting:\n");
+    for (int i = 0; i < n; i++)
+        printf("%d ", a[i]);
+    printf("\n");
+
+    countingSort(a, n);
+
+    printf("After sorting:\n");
+    for (int i = 0; i < n; i++)
+        printf("%d ", a[i]);
+    printf("\n");
+
     return 0;
 }
 
-void readFile(int arr[],int n,char *filename)
-{
-    FILE *input;
-    input=fopen(filename, "r");
-    if (input == NULL) 
-    {
-        printf("File couldn't be found\n");
+void loadArrayFromFile(int a[], int n, char *filename) {
+    FILE *in = fopen(filename, "r");
+    if (!in) {
+        printf("Error: Could not open file %s\n", filename);
         exit(1);
     }
-    else
-    {
-        for(int i=0;i<n;i++)
-            fscanf(input, "%d", &arr[i]);
 
-        fclose(input);
+    printf("Reading numbers from file...\n");  // Debug message
+
+    for (int i = 0; i < n; i++) {
+        if (fscanf(in, "%d", &a[i]) != 1) {  // Handle possible read errors
+            printf("Error: Failed to read number at index %d\n", i);
+            fclose(in);
+            exit(1);
+        }
     }
+
+    fclose(in);
 }
 
-void countingSort(int arr[], int n) 
+void countingSort(int a[], int n)
 {
-    int is_sorted=1;
-    for(i=0;i<n-1;i++)
+    // Check if already sorted
+    int alreadySorted = 1;
+    for (int i = 1; i < n; i++)
     {
-        if(arr[i]<arr[i-1])
+        if (a[i] < a[i - 1])
         {
-            is_sorted=0;
+            alreadySorted = 0;
             break;
         }
     }
-    int max=arr[0];
-    for (int i=1;i<n;i++)
+    if (alreadySorted)
     {
-        if(arr[i]>max)
-            max=arr[i];
+        printf("Array is already sorted.\n");
+        return;
     }
-    int count[max+1];
+
+    // Find maximum value in the array
+    int max = a[0];
+    for (int i = 1; i < n; i++) {
+        if (a[i] > max)
+            max = a[i];
+    }
+
+    // Allocate memory for count array (calloc ensures zero initialization)
+    int *cnt = calloc(max + 1, sizeof(int));
+    if (!cnt)
+    {  // Check if allocation failed
+        printf("Error: Memory allocation failed!\n");
+        exit(1);
+    }
+
+    // Count occurrences of each number
+    for (int i = 0; i < n; i++)
+        cnt[a[i]]++;
+
+    // Reconstruct sorted array
+    int idx=0;
     for (int i=0;i<=max;i++)
-        count[i]=0;
-    for (int i=0;i<n;i++)
-        count[arr[i]]++;
-    int index=0;
-    for (int i=0;i<=max; i++)
     {
-        while (count[i]>0)
-        {
-            arr[index++]=i;
-            count[i]--;
-        }
+        while(cnt[i]==0)
+            a[idx++]=i;
     }
+    free(cnt);
 }

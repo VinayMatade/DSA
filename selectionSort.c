@@ -1,59 +1,85 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void readFile(int arr[],int n, char *filename);
+void loadArrayFromFile(int arr[], int n, char *filename);
 void selectionSort(int arr[], int n);
 
-int main()
-{
-    int n=10;
+int main() {
+    int n = 10;
     int arr[n];
-    readFile(arr,n,"input.txt");
-    printf("array before sorting:\n");
-    
-    for(int i=0;i<n;i++)
-       printf("%d ",arr[i]);
-    
-       printf("\n");
-    
-    selectionSort(arr,n);
-    printf("array after sorting:\n");
-    
-    for(int i=0;i<n;i++)
-       printf("%d ",arr[i]);
-    
-       printf("\n");
+
+    loadArrayFromFile(arr, n, "input.txt");
+
+    printf("Array before sorting:\n");
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+
+    selectionSort(arr, n);
+
+    printf("Array after sorting:\n");
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+
     return 0;
 }
 
-void readFile(int arr[],int n,char *filename)
+void loadArrayFromFile(int arr[], int n, char *filename)
 {
-    FILE *input;
-    input=fopen(filename, "r");
-    if (input == NULL) 
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
     {
-        printf("File couldn't be found\n");
+        printf("Error: Could not open file %s\n", filename);
         exit(1);
     }
-    else
-    {
-        for(int i=0;i<n;i++)
-            fscanf(input, "%d", &arr[i]);
 
-        fclose(input);
+    printf("Reading numbers from file...\n");  // Debugging print
+
+    for (int i = 0; i < n; i++)
+    {
+        if (fscanf(file, "%d", &arr[i]) != 1)
+        {  // Handle file read errors
+            printf("Error: Failed to read number at index %d\n", i);
+            fclose(file);
+            exit(1);
+        }
     }
+
+    fclose(file);
 }
 
-void selectionSort(int arr[], int n) {
-    for (int i = 0; i < n - 1; i++) {
-        int min_idx = i;
-        for (int j = i + 1; j < n; j++) {
-            if (arr[j] < arr[min_idx]) {
-                min_idx = j;
+void selectionSort(int arr[], int n)
+{
+    int isSorted = 1;  // Assume the array is already sorted
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        int minIndex = i;
+
+        // minimum element in the unsorted portion
+        for (int j = i + 1; j < n; j++)
+        {
+            if (arr[j] < arr[minIndex])
+            {
+                minIndex = j;
+                isSorted = 0;  // If smaller element, array isn't sorted
             }
         }
-        int temp = arr[min_idx];
-        arr[min_idx] = arr[i];
-        arr[i] = temp;
+
+        // Swap only if needed
+        if (minIndex != i) {
+            int temp = arr[minIndex];
+            arr[minIndex] = arr[i];
+            arr[i] = temp;
+        }
+
+        // If no swaps were needed, the array is already sorted
+        if (isSorted) {
+            printf("Array is already sorted, exiting early.\n");  // Debug message
+            return;
+        }
+
+        isSorted = 1;  // Reset sorted flag
     }
 }
