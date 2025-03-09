@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void sort(int arr[], int n, int ascending) 
+void sort(int arr[],int n,int ascending) 
 {
-    for (int i = 0; i < n-1; i++) 
+    for(int i=0;i<n-1;i++) 
     {
-        for (int j=0;j<n-i-1;j++)
+        for(int j=0;j<n-i-1;j++)
         if (ascending && arr[j]>arr[j+1]) 
         {
             int temp=arr[j];
@@ -32,21 +32,21 @@ int main()
         printf("File not found\n");
         return 0;
     }
-    for (int i=0; i<10; i++)
-        fscanf(inputFile,"%d", &values[i]);
+    for (int i=0;i<10;i++)
+        fscanf(inputFile,"%d,",&values[i]);
     
-    sort(values, 10, 1);
-    fseek(inputFile, 0, SEEK_END);
-    fprintf(inputFile, "\nAscending: ");
+    sort(values,10,1);
+    fseek(inputFile,0,SEEK_END);
+    fprintf(inputFile,"\nAscending: ");
 
     for (int i=0;i<10;i++)
-        fprintf(inputFile, "%d,", values[i]);
+        fprintf(inputFile,"%d,",values[i]);
     
     sort(values,10,0);
-    fprintf(inputFile, "\nDescending: ");
+    fprintf(inputFile,"\nDescending: ");
 
     for (int i=0;i<10;i++)
-        fprintf(inputFile, "%d,", values[i]);
+        fprintf(inputFile,"%d,",values[i]);
 
     fclose(inputFile);
     return 0;

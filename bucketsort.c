@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void readFile(int arr[],int n, char *filename);
-void bucketSort(int arr[], int n);
+int bucketSort(int arr[], int n);
 
 int main()
 {
@@ -46,11 +46,21 @@ void readFile(int arr[],int n,char *filename)
     }
 }
 
-void bucketSort(int arr[], int n) 
+int bucketSort(int arr[], int n) 
 {
     int i,j;
     int max=arr[0];
-    for (i=1;i<n;i++) 
+    int is_sorted=1;
+    for(i=0;i<n-1;i++)
+    {
+        if(arr[i]<arr[i-1])
+        {
+            is_sorted=0;
+            break;
+        }
+    }
+
+    for(i=1;i<n;i++)
     {
         if (arr[i]>max)
             max=arr[i];

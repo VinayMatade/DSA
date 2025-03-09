@@ -44,21 +44,34 @@ void readFile(int arr[],int n,char *filename)
     }
 }
 
-void countingSort(int arr[], int n) {
-    int max = arr[0];
-    for (int i = 1; i < n; i++) {
-        if (arr[i] > max)
-            max = arr[i];
+void countingSort(int arr[], int n) 
+{
+    int is_sorted=1;
+    for(i=0;i<n-1;i++)
+    {
+        if(arr[i]<arr[i-1])
+        {
+            is_sorted=0;
+            break;
+        }
     }
-    int count[max + 1];
-    for (int i = 0; i <= max; i++)
-        count[i] = 0;
-    for (int i = 0; i < n; i++)
+    int max=arr[0];
+    for (int i=1;i<n;i++)
+    {
+        if(arr[i]>max)
+            max=arr[i];
+    }
+    int count[max+1];
+    for (int i=0;i<=max;i++)
+        count[i]=0;
+    for (int i=0;i<n;i++)
         count[arr[i]]++;
-    int index = 0;
-    for (int i = 0; i <= max; i++) {
-        while (count[i] > 0) {
-            arr[index++] = i;
+    int index=0;
+    for (int i=0;i<=max; i++)
+    {
+        while (count[i]>0)
+        {
+            arr[index++]=i;
             count[i]--;
         }
     }
